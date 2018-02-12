@@ -105,7 +105,7 @@
 
             _isHex(string) {
                 const isStr = typeof string === 'string';
-                if (isStr && string.startsWith('#')) {
+                if (isStr && string.startsWith('#') && string.length === 4 || string.length === 7) {
                     const hex = Number.parseInt(string.substr(1), HEXADECIMAL);
                     return !isNaN(hex);
                 }
