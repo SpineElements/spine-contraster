@@ -1,7 +1,7 @@
 ## SpineContraster
 
 `SpineContraster` determines to which dark or light theme an element belongs based on its
-background color. Provides `darkTheme` and `lightTheme` boolean properties to the element.
+background color. Sets `darkTheme` and `lightTheme` boolean properties to the element.
 
 Theme detection is based on a background color contrast to black and white colors
 respectively. If the contrast to black is higher than the contrast to white - light
