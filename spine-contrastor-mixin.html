@@ -1,0 +1,142 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<script>{
+    /**
+     * `spine-contrastor-mixin`
+     * Mixin which determines to which dark or light theme an element belongs based on its
+     * background color. Applies `dark-theme` or `light-theme` attribute to the element.
+     *
+     * Theme detection is based on a background color contrast to black and white colors
+     * respectively. If the contrast to black is higher than the contrast to white - light
+     * theme is used, otherwise - dark theme.
+     *
+     * For implementation details see `_calculateTheme` method.
+     *
+     * @mixinFunction
+     * @polymer
+     * @demo demo/index.html
+     */
+    const SpineContrastorMixin = Polymer.dedupingMixin(ParentClass => {
+        const HEXADECIMAL = 16;
+
+        class SpineContrastorMixin extends ParentClass {
+
+            static get properties() {
+                return {
+                    /**
+                     * The background color value.
+                     */
+                    bgColor: {
+                        type: String,
+                        observer: '_backgroundObserver'
+                    },
+
+                    /**
+                     * If true, `bgColor` property will be used as element `background-color` style.
+                     */
+                    reflectToStyle: {
+                        type: Boolean,
+                        value: false
+                    }
+                }
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                if (!this.bgColor) {
+                    const background = window.getComputedStyle(this)['background-color'];
+                    if (this._isRgb(background)) {
+                        this._calculateTheme(background);
+                    }
+                }
+            }
+
+            /**
+             * For the algorithm details see:
+             *  - https://www.w3.org/TR/WCAG20/#contrast-ratiodef
+             *  - https://www.w3.org/TR/WCAG20/#relativeluminancedef
+             *  - https://en.wikipedia.org/wiki/Luma_(video)#Rec._601_luma_versus_Rec._709_luma_coefficients
+             *
+             * @param background - a color CSS string
+             * @private
+             */
+            _calculateTheme(background) {
+                const backgroundRgb = this._toRgb(background);
+                const colors = Object.keys(backgroundRgb);
+                const tokens = {};
+                for (let i = 0; i < colors.length; i++) {
+                    const color = colors[i];
+                    tokens[color] = backgroundRgb[color] / 255;
+                    if (tokens[color] <= 0.03928) {
+                        tokens[color] = tokens[color] / 12.92;
+                    } else {
+                        tokens[color] = Math.pow((tokens[color] + 0.055) / 1.055, 2.4);
+                    }
+                }
+                const luminance = 0.2126 * tokens.r + 0.7152 * tokens.g + 0.0722 * tokens.b;
+
+                if (luminance > 0.179) {
+                    this.removeAttribute('dark-theme');
+                    this.setAttribute('light-theme', true);
+                } else {
+                    this.removeAttribute('light-theme');
+                    this.setAttribute('dark-theme', true);
+                }
+            }
+
+            _backgroundObserver(value) {
+                if (value) {
+                    this._calculateTheme(value);
+                    if (this.reflectToStyle) {
+                        this.style.background = value;
+                    }
+                }
+            }
+
+            _isRgb(string) {
+                const isStr = typeof string === 'string';
+                const parts = isStr ? string.split(',') : [];
+                return isStr && string.startsWith('rgb(') && (parts.length === 3);
+            }
+
+            _isHex(string) {
+                const isStr = typeof string === 'string';
+                if (isStr && string.startsWith('#')) {
+                    const hex = Number.parseInt(string.substr(1), HEXADECIMAL);
+                    return !isNaN(hex);
+                }
+
+                return false;
+            }
+
+            _toRgb(colorStr) {
+                if (!this._isRgb(colorStr) && !this._isHex(colorStr)) {
+                    throw new Error(`Expected the CSS RGB or HEX format, but found - ${colorStr}`);
+                }
+
+                const res = {};
+
+                if (colorStr.startsWith('#')) {
+                    // HEX case: #ffffff or #fff
+                    const shortFormat = colorStr.length === 4;
+                    const step = shortFormat ? 1 : 2;
+                    // Converts to long format: N * (F + 1) = NN
+                    const multiplier = shortFormat ? HEXADECIMAL + 1 : 1;
+
+                    res.r = Number.parseInt(colorStr.substr(1, step), HEXADECIMAL) * multiplier;
+                    res.g = Number.parseInt(colorStr.substr(1 + step, step), HEXADECIMAL) * multiplier;
+                    res.b = Number.parseInt(colorStr.substr(1 + 2 * step, step), HEXADECIMAL) * multiplier;
+                } else {
+                    // RGB case: rgb(255, 255, 255)
+                    const numbers = colorStr.split('(')[1].split(',');
+
+                    res.r = Number.parseInt(numbers[0]);
+                    res.g = Number.parseInt(numbers[1]);
+                    res.b = Number.parseInt(numbers[2]);
+                }
+
+                return res;
+            }
+        }
+    });
+}</script>
