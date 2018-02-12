@@ -2,8 +2,8 @@
 
 <script>
     /**
-     * Mixin which determines to which dark or light theme an element belongs based on its
-     * background color. Sets `darkTheme` and `lightTheme` boolean properties to the element.
+     * `SpineContraster` is a mixin to determine to which dark or light theme an element belongs
+     * based on its background color. Sets `darkTheme` and `lightTheme` boolean properties to the element.
      *
      * Theme detection is based on a background color contrast to black and white colors
      * respectively. If the contrast to black is higher than the contrast to white - light
@@ -19,11 +19,10 @@
         const HEXADECIMAL = 16;
 
         return class SpineContraster extends ParentClass {
-
             static get properties() {
                 return {
                     /**
-                     * The background color value.
+                     * The background color value in the format of the CSS rgb or HEX color.
                      */
                     bgColor: {
                         type: String,
@@ -114,7 +113,7 @@
 
             _toRgb(colorStr) {
                 if (!this._isRgb(colorStr) && !this._isHex(colorStr)) {
-                    throw new Error(`Expected the CSS RGB or HEX format, but found - ${colorStr}`);
+                    throw new Error(`Expected the CSS RGB or HEX color format, but found - ${colorStr}`);
                 }
 
                 const res = {};
