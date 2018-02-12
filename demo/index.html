@@ -5,13 +5,13 @@
     <meta name="viewport"
           content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>spine-contrastor-mixin demo</title>
+    <title>spine-contraster demo</title>
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="./spine-contrastor-demo.html">
+    <link rel="import" href="./spine-contraster-demo.html">
 
     <custom-style>
         <style is="custom-style" include="demo-pages-shared-styles">
@@ -24,10 +24,10 @@
     <demo-snippet class="centered-demo">
         <template>
             <style is="custom-styles">
-                spine-contrastor-demo[light-theme] {
+                spine-contraster-demo[light-theme] {
                     color: #000;
                 }
-                spine-contrastor-demo[dark-theme] {
+                spine-contraster-demo[dark-theme] {
                     color: #fff;
                 }
                 #container {
@@ -41,7 +41,7 @@
                     <div id="container">
                         <dom-repeat items="[[colors]]" as="color">
                             <template>
-                                <spine-contrastor-demo bg-color="[[color]]"></spine-contrastor-demo>
+                                <spine-contraster-demo bg-color="[[color]]"></spine-contraster-demo>
                             </template>
                         </dom-repeat>
                     </div>

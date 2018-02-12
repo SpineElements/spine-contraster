@@ -2,7 +2,6 @@
 
 <script>
     /**
-     * `spine-contrastor-mixin`
      * Mixin which determines to which dark or light theme an element belongs based on its
      * background color. Provides `darkTheme` and `lightTheme` boolean properties to the element.
      *
@@ -16,10 +15,10 @@
      * @polymer
      * @demo demo/index.html
      */
-    const SpineContrastorMixin = Polymer.dedupingMixin(ParentClass => {
+    const SpineContraster = Polymer.dedupingMixin(ParentClass => {
         const HEXADECIMAL = 16;
 
-        return class SpineContrastorMixin extends ParentClass {
+        return class SpineContraster extends ParentClass {
 
             static get properties() {
                 return {

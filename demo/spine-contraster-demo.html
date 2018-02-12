@@ -1,8 +1,8 @@
 <link rel="import" href="../../polymer/polymer-element.html">
 
-<link rel="import" href="../spine-contrastor-mixin.html">
+<link rel="import" href="../spine-contraster.html">
 
-<dom-module id="spine-contrastor-demo">
+<dom-module id="spine-contraster-demo">
     <template>
         <style>
             :host {
@@ -21,9 +21,9 @@
     </template>
 
     <script>
-        class SpineContrastorDemo extends SpineContrastorMixin(Polymer.Element) {
+        class SpineContrasterDemoItem extends SpineContraster(Polymer.Element) {
             static get is() {
-                return 'spine-contrastor-demo';
+                return 'spine-contraster-demo';
             }
 
             static get properties() {
@@ -54,6 +54,6 @@
             }
         }
 
-        window.customElements.define(SpineContrastorDemo.is, SpineContrastorDemo);
+        window.customElements.define(SpineContrasterDemoItem.is, SpineContrasterDemoItem);
     </script>
 </dom-module>

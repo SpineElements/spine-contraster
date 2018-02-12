@@ -1,9 +1,9 @@
 {
-  "name": "spine-contrastor-mixin",
+  "name": "spine-contraster",
   "description": "Mixin which determines to which dark or light theme an element belongs based on its background color. Edit",
-  "main": "spine-contrastor-mixin.html",
+  "main": "spine-contraster.html",
   "license": "Apache-2.0",
-  "homepage": "https://github.com/SpineElements/spine-contrastor-mixin",
+  "homepage": "https://github.com/SpineElements/spine-contraster",
   "keywords": [
     "web-components",
     "web-component",

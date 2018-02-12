@@ -5,12 +5,12 @@
   <meta name="viewport"
         content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-  <title>spine-contrastor-mixin test</title>
+  <title>spine-contraster test</title>
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
-  <link rel="import" href="../spine-contrastor-mixin.html">
+  <link rel="import" href="../spine-contraster.html">
 
   <style>
     body {
@@ -38,9 +38,9 @@
 </test-fixture>
 
 <script>
-    suite('spine-contrastor-mixin', function () {
+    suite('spine-contraster', function () {
         suiteSetup(() => {
-            class TestElement extends SpineContrastorMixin(Polymer.Element) {
+            class TestElement extends SpineContraster(Polymer.Element) {
                 static get is() { return 'test-element' }
             }
             window.customElements.define(TestElement.is, TestElement);
