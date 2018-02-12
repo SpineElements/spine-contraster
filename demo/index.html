@@ -30,12 +30,15 @@
                 spine-contrastor-demo[dark-theme] {
                     color: #fff;
                 }
+                #container {
+                    text-align: center;
+                }
             </style>
 
             <button id="randomize">Randomize colors</button>
             <dom-bind id="autobind">
                 <template>
-                    <div>
+                    <div id="container">
                         <dom-repeat items="[[colors]]" as="color">
                             <template>
                                 <spine-contrastor-demo bg-color="[[color]]"></spine-contrastor-demo>
@@ -61,7 +64,6 @@
                     for (let i = 0 ; i < 20; i++) {
                         colors.push(`#${randomHex()}${randomHex()}${randomHex()}`)
                     }
-                    console.log(colors);
                     return colors;
                 }
 
