@@ -1,10 +1,10 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
-<script>{
+<script>
     /**
      * `spine-contrastor-mixin`
      * Mixin which determines to which dark or light theme an element belongs based on its
-     * background color. Applies `dark-theme` or `light-theme` attribute to the element.
+     * background color. Provides `darkTheme` and `lightTheme` boolean properties to the element.
      *
      * Theme detection is based on a background color contrast to black and white colors
      * respectively. If the contrast to black is higher than the contrast to white - light
@@ -19,7 +19,7 @@
     const SpineContrastorMixin = Polymer.dedupingMixin(ParentClass => {
         const HEXADECIMAL = 16;
 
-        class SpineContrastorMixin extends ParentClass {
+        return class SpineContrastorMixin extends ParentClass {
 
             static get properties() {
                 return {
@@ -32,9 +32,17 @@
                     },
 
                     /**
-                     * If true, `bgColor` property will be used as element `background-color` style.
+                     * Indicates that the element background is light.
                      */
-                    reflectToStyle: {
+                    lightTheme: {
+                        type: Boolean,
+                        value: false
+                    },
+
+                    /**
+                     * Indicates that the element background is dark.
+                     */
+                    darkTheme: {
                         type: Boolean,
                         value: false
                     }
@@ -61,35 +69,31 @@
              * @private
              */
             _calculateTheme(background) {
-                const backgroundRgb = this._toRgb(background);
-                const colors = Object.keys(backgroundRgb);
+                const luminance = this._calculateLuminance(background);
+                const isLight = luminance > 0.179;
+                this.lightTheme = isLight;
+                this.darkTheme = !isLight;
+            }
+
+            _calculateLuminance(color) {
+                const colorRgb = this._toRgb(color);
+                const colors = Object.keys(colorRgb);
                 const tokens = {};
                 for (let i = 0; i < colors.length; i++) {
                     const color = colors[i];
-                    tokens[color] = backgroundRgb[color] / 255;
+                    tokens[color] = colorRgb[color] / 255;
                     if (tokens[color] <= 0.03928) {
                         tokens[color] = tokens[color] / 12.92;
                     } else {
                         tokens[color] = Math.pow((tokens[color] + 0.055) / 1.055, 2.4);
                     }
                 }
-                const luminance = 0.2126 * tokens.r + 0.7152 * tokens.g + 0.0722 * tokens.b;
-
-                if (luminance > 0.179) {
-                    this.removeAttribute('dark-theme');
-                    this.setAttribute('light-theme', true);
-                } else {
-                    this.removeAttribute('light-theme');
-                    this.setAttribute('dark-theme', true);
-                }
+                return 0.2126 * tokens.r + 0.7152 * tokens.g + 0.0722 * tokens.b;
             }
 
             _backgroundObserver(value) {
                 if (value) {
                     this._calculateTheme(value);
-                    if (this.reflectToStyle) {
-                        this.style.background = value;
-                    }
                 }
             }
 
@@ -139,4 +143,4 @@
             }
         }
     });
-}</script>
+</script>
