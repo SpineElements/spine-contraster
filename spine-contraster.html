@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer-element.html">
 
-<script>
+<script>{
     /**
      * `SpineContraster` is a mixin to determine to which dark or light theme an element belongs
      * based on its background color. Sets `darkTheme` and `lightTheme` boolean properties to the element.
@@ -17,6 +17,7 @@
      */
     const SpineContraster = Polymer.dedupingMixin(ParentClass => {
         const HEXADECIMAL = 16;
+        const DARK_THEME_MAX_LUMINANCE = 0.179;
 
         return class SpineContraster extends ParentClass {
             static get properties() {
@@ -67,10 +68,14 @@
              * @private
              */
             _calculateTheme(background) {
-                const luminance = this._calculateLuminance(background);
-                const isLight = luminance > 0.179;
+                const isLight = this._isLightTheme(background);
                 this.lightTheme = isLight;
                 this.darkTheme = !isLight;
+            }
+
+            _isLightTheme(background) {
+                const luminance = this._calculateLuminance(background);
+                return luminance > DARK_THEME_MAX_LUMINANCE;
             }
 
             _calculateLuminance(color) {
@@ -141,4 +146,7 @@
             }
         }
     });
-</script>
+
+    window.SpineElements = window.SpineElements || {};
+    window.SpineElements.SpineContraster = SpineContraster;
+}</script>

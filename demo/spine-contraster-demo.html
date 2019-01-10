@@ -20,8 +20,8 @@
         [[_getLabel(lightTheme)]]
     </template>
 
-    <script>
-        class SpineContrasterDemoItem extends SpineContraster(Polymer.Element) {
+    <script>{
+        class SpineContrasterDemoItem extends SpineElements.SpineContraster(Polymer.Element) {
             static get is() {
                 return 'spine-contraster-demo';
             }
@@ -55,5 +55,5 @@
         }
 
         window.customElements.define(SpineContrasterDemoItem.is, SpineContrasterDemoItem);
-    </script>
+    }</script>
 </dom-module>
