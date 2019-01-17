@@ -56,12 +56,12 @@
                 function getRandomColors() {
                     const colors = [];
                     for (let i = 0 ; i < 20; i++) {
-                        colors.push(`#${getRandomHext()}${getRandomHext()}${getRandomHext()}`)
+                        colors.push(`#${getRandomHex()}${getRandomHex()}${getRandomHex()}`)
                     }
                     return colors;
                 }
 
-                function getRandomHext() {
+                function getRandomHex() {
                     const number = Math.ceil(Math.random() * 240 + 16);
                     return number.toString(16);
                 }
