@@ -50,10 +50,10 @@
 
             <script>
                 const autobind = document.body.querySelector('#autobind');
-                autobind.colors = randomColors();
-                autobind.randomizeColors = () => autobind.colors = randomColors();
+                autobind.colors = getRandomColors();
+                autobind.randomizeColors = () => autobind.colors = getRandomColors();
 
-                function randomColors() {
+                function getRandomColors() {
                     const colors = [];
                     for (let i = 0 ; i < 20; i++) {
                         colors.push(`#${randomHex()}${randomHex()}${randomHex()}`)
