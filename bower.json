@@ -1,0 +1,35 @@
+{
+  "name": "spine-contraster",
+  "description": "A mixin to determine the theme (dark or light) an element belongs to based on its background color.",
+  "main": "spine-contraster.html",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/SpineElements/spine-contraster",
+  "keywords": [
+    "web-components",
+    "web-component",
+    "polymer",
+    "spine",
+    "color",
+    "Material",
+    "theme",
+    "light",
+    "dark"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "iron-doc-viewer": "^3.1.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0"
+  }
+}

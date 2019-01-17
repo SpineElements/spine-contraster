@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>spine-contraster demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="./spine-contraster-demo.html">
+
+    <custom-style>
+        <style is="custom-style" include="demo-pages-shared-styles">
+        </style>
+    </custom-style>
+</head>
+<body>
+<div class="vertical-section-container centered">
+    <h3>An element with SpineContrastorMixin can detect its own theme</h3>
+    <demo-snippet class="centered-demo">
+        <template>
+            <style is="custom-styles">
+                spine-contraster-demo[light-theme] {
+                    color: #000;
+                }
+                spine-contraster-demo[dark-theme] {
+                    color: #fff;
+                }
+                #container {
+                    text-align: center;
+                }
+            </style>
+
+            <dom-bind id="autobind">
+                <template>
+                    <button id="randomize" on-click="randomizeColors">Randomize colors</button>
+                    <div id="container">
+                        <dom-repeat items="[[colors]]" as="color">
+                            <template>
+                                <spine-contraster-demo bg-color="[[color]]"></spine-contraster-demo>
+                            </template>
+                        </dom-repeat>
+                    </div>
+                </template>
+            </dom-bind>
+
+            <script>
+                const autobind = document.body.querySelector('#autobind');
+                autobind.colors = getRandomColors();
+                autobind.randomizeColors = () => autobind.colors = getRandomColors();
+
+                function getRandomColors() {
+                    const colors = [];
+                    for (let i = 0 ; i < 20; i++) {
+                        colors.push(`#${getRandomHex()}${getRandomHex()}${getRandomHex()}`)
+                    }
+                    return colors;
+                }
+
+                function getRandomHex() {
+                    const number = Math.ceil(Math.random() * 240 + 16);
+                    return number.toString(16);
+                }
+            </script>
+        </template>
+    </demo-snippet>
+</div>
+</body>
+</html>

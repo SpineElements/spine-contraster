@@ -1,0 +1,59 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<link rel="import" href="../spine-contraster.html">
+
+<dom-module id="spine-contraster-demo">
+    <template>
+        <style>
+            :host {
+                display: inline-block;
+                height: 80px;
+                width: 80px;
+                line-height: 80px;
+                border-radius: 50%;
+                margin: 8px;
+                text-align: center;
+                border: 1px solid rgba(0, 0, 0, .12);
+            }
+        </style>
+
+        [[_getLabel(lightTheme)]]
+    </template>
+
+    <script>{
+        class SpineContrasterDemoItem extends SpineElements.SpineContraster(Polymer.Element) {
+            static get is() {
+                return 'spine-contraster-demo';
+            }
+
+            static get properties() {
+                return {
+                    bgColor: {
+                        type: String,
+                        observer: '__backgroundObserver'
+                    },
+
+                    lightTheme: {
+                        type: Boolean,
+                        reflectToAttribute: true
+                    },
+
+                    darkTheme: {
+                        type: Boolean,
+                        reflectToAttribute: true
+                    }
+                };
+            }
+
+            __backgroundObserver(bg) {
+                this.style['background-color'] = bg;
+            }
+
+            _getLabel(lightTheme) {
+                return lightTheme ? 'Light' : 'Dark';
+            }
+        }
+
+        window.customElements.define(SpineContrasterDemoItem.is, SpineContrasterDemoItem);
+    }</script>
+</dom-module>

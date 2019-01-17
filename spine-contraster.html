@@ -1,0 +1,146 @@
+<link rel="import" href="../polymer/polymer-element.html">
+
+<script>{
+    /**
+     * `SpineContraster` is a mixin to determine the theme (dark or light) an element belongs to
+     * based on its background color. Sets `darkTheme` and `lightTheme` boolean properties to the element.
+     *
+     * Theme detection is based on a background color contrast to black and white colors
+     * respectively. If the contrast to black is higher than the contrast to white - light
+     * theme is used, otherwise - dark theme.
+     *
+     * For the luminance calculation details see:
+     * - https://www.w3.org/TR/WCAG20/#contrast-ratiodef
+     * - https://www.w3.org/TR/WCAG20/#relativeluminancedef
+     * - https://en.wikipedia.org/wiki/Luma_(video)#Rec._601_luma_versus_Rec._709_luma_coefficients
+     *
+     * @mixinFunction
+     * @polymer
+     * @demo demo/index.html
+     */
+    const SpineContraster = Polymer.dedupingMixin(ParentClass => {
+        const HEXADECIMAL = 16;
+        const DARK_THEME_MAX_LUMINANCE = 0.179;
+
+        return class SpineContraster extends ParentClass {
+            static get properties() {
+                return {
+                    /**
+                     * The background color value in the format of the CSS rgb or HEX color.
+                     */
+                    bgColor: {
+                        type: String,
+                        observer: '_backgroundObserver'
+                    },
+
+                    /**
+                     * Indicates that the element background is light.
+                     */
+                    lightTheme: {
+                        type: Boolean,
+                        value: false
+                    },
+
+                    /**
+                     * Indicates that the element background is dark.
+                     */
+                    darkTheme: {
+                        type: Boolean,
+                        value: false
+                    }
+                }
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                if (!this.bgColor) {
+                    const background = window.getComputedStyle(this)['background-color'];
+                    if (this._isRgb(background)) {
+                        this._calculateTheme(background);
+                    }
+                }
+            }
+
+            _calculateTheme(background) {
+                const isLight = this._isLightTheme(background);
+                this.lightTheme = isLight;
+                this.darkTheme = !isLight;
+            }
+
+            _isLightTheme(background) {
+                const luminance = this._calculateLuminance(background);
+                return luminance > DARK_THEME_MAX_LUMINANCE;
+            }
+
+            _calculateLuminance(color) {
+                const colorRgb = this._toRgb(color);
+                const colors = Object.keys(colorRgb);
+                const tokens = {};
+                for (let i = 0; i < colors.length; i++) {
+                    const color = colors[i];
+                    tokens[color] = colorRgb[color] / 255;
+                    if (tokens[color] <= 0.03928) {
+                        tokens[color] = tokens[color] / 12.92;
+                    } else {
+                        tokens[color] = Math.pow((tokens[color] + 0.055) / 1.055, 2.4);
+                    }
+                }
+                return 0.2126 * tokens.r + 0.7152 * tokens.g + 0.0722 * tokens.b;
+            }
+
+            _backgroundObserver(value) {
+                if (value) {
+                    this._calculateTheme(value);
+                }
+            }
+
+            _isRgb(string) {
+                const isStr = typeof string === 'string';
+                const parts = isStr ? string.split(',') : [];
+                return isStr && string.startsWith('rgb(') && (parts.length === 3);
+            }
+
+            _isHex(string) {
+                const isStr = typeof string === 'string';
+                if (isStr && string.startsWith('#') && string.length === 4 || string.length === 7) {
+                    const hex = Number.parseInt(string.substr(1), HEXADECIMAL);
+                    return !isNaN(hex);
+                }
+
+                return false;
+            }
+
+            _toRgb(colorStr) {
+                if (!this._isRgb(colorStr) && !this._isHex(colorStr)) {
+                    throw new Error(`Expected the CSS RGB or HEX color format, but found - ${colorStr}`);
+                }
+
+                const res = {};
+
+                if (colorStr.startsWith('#')) {
+                    // HEX case: #ffffff or #fff
+                    const shortFormat = colorStr.length === 4;
+                    const step = shortFormat ? 1 : 2;
+                    // Converts to long format: N * (F + 1) = NN
+                    const multiplier = shortFormat ? HEXADECIMAL + 1 : 1;
+
+                    res.r = Number.parseInt(colorStr.substr(1, step), HEXADECIMAL) * multiplier;
+                    res.g = Number.parseInt(colorStr.substr(1 + step, step), HEXADECIMAL) * multiplier;
+                    res.b = Number.parseInt(colorStr.substr(1 + 2 * step, step), HEXADECIMAL) * multiplier;
+                } else {
+                    // RGB case: rgb(255, 255, 255)
+                    const numbers = colorStr.split('(')[1].split(',');
+
+                    res.r = Number.parseInt(numbers[0]);
+                    res.g = Number.parseInt(numbers[1]);
+                    res.b = Number.parseInt(numbers[2]);
+                }
+
+                return res;
+            }
+        }
+    });
+
+    window.SpineElements = window.SpineElements || {};
+    window.SpineElements.SpineContraster = SpineContraster;
+}</script>

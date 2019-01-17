@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+  <title>spine-contraster test</title>
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../spine-contraster.html">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Roboto, Noto, sans-serif;
+    }
+  </style>
+</head>
+<body>
+<test-fixture id="light">
+  <template>
+    <test-element bg-color="#ceeeff"></test-element>
+  </template>
+</test-fixture>
+
+<test-fixture id="dark">
+  <style>
+    test-element {
+      background-color: rgb(40, 20, 58);
+    }
+  </style>
+  <template>
+    <test-element></test-element>
+  </template>
+</test-fixture>
+
+<script>
+    suite('spine-contraster', function () {
+        suiteSetup(() => {
+            class TestElement extends SpineContraster(Polymer.Element) {
+                static get is() { return 'test-element' }
+            }
+            window.customElements.define(TestElement.is, TestElement);
+        });
+
+        test('should set `lightTheme` property to true if the background color is light', () => {
+            const element = fixture('light');
+            expect(element.lightTheme).to.eql(true);
+            expect(element.darkTheme).to.eql(false);
+        });
+
+        test('should set `darkTheme` property to true if the background color is dark', () => {
+            const element = fixture('dark');
+            expect(element.lightTheme).to.eql(false);
+            expect(element.darkTheme).to.eql(true);
+        });
+    });
+</script>
+</body>
+</html>
+
